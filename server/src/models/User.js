@@ -21,26 +21,46 @@ const User = new Schema({
     },
     birthday: {type: Date},
     role: {type: String, enum: roles, default: undefined},
-    student: {
-        userClass: {type: Schema.Types.ObjectId, ref: 'Class'},
-        grades: {type: Schema.Types.ObjectId, ref: 'Grades'},
-        parents: {
-            mother: {type: Schema.Types.ObjectId, ref: 'User'},
-            father: {type: Schema.Types.ObjectId, ref: 'User'}
-        }
-    },
-    parent: {
-        children: [{type: Schema.Types.ObjectId, ref: 'User'}]
-    },
-    teacher: {
-        lessons: [{type: Schema.Types.ObjectId, ref: 'Lesson'}],
-        teacherClass: {type: Schema.Types.ObjectId, ref: 'Class'}
-    },
-    verified: {
-        role: {type: Boolean, default: false},
-        email: {type: Boolean, default: false}
-    },
-
+    // student: {
+    //     userClass: {type: Schema.Types.ObjectId, ref: 'Class'},
+    //     grades: {type: Schema.Types.ObjectId, ref: 'Grades'},
+    //     parents: {
+    //         mother: {type: Schema.Types.ObjectId, ref: 'User'},
+    //         father: {type: Schema.Types.ObjectId, ref: 'User'}
+    //     }
+    // },
+    // parent: {
+    //     children: [{type: Schema.Types.ObjectId, ref: 'User'}]
+    // },
+    // teacher: {
+    //     lessons: [{type: Schema.Types.ObjectId, ref: 'Lesson'}],
+    //     teacherClass: {type: Schema.Types.ObjectId, ref: 'Class'}
+    // },
+    verifiedRole: {type: Boolean, default: false},
+    verifiedEmail: {type: Boolean, default: false},
 })
 
+const Parent = new Schema({
+    children: [{type: Schema.Types.ObjectId, ref: 'User'}]
+})
+
+const Teacher = new Schema({
+    lessons: [{type: Schema.Types.ObjectId, ref: 'Lesson'}],
+    teacherClass: {type: Schema.Types.ObjectId, ref: 'Class'}
+})
+
+const Student = new Schema({
+    userClass: {type: Schema.Types.ObjectId, ref: 'Class'},
+         grades: {type: Schema.Types.ObjectId, ref: 'Grades'},
+         parents: {
+             mother: {type: Schema.Types.ObjectId, ref: 'User'},
+             father: {type: Schema.Types.ObjectId, ref: 'User'}
+         }
+})
+
+const user = new model('User', User)
+
 module.exports = new model('User', User)
+module.exports = user.discriminator('Parent', Parent)
+module.exports = user.discriminator('Student', Student)
+module.exports = user.discriminator('Teacher', Teacher)
