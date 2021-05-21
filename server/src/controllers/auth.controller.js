@@ -43,27 +43,46 @@ const registration = async (req, res) => {
     //      lastName: String,
     //      middleName: String
     // }
+    // role enums: 'Учень', 'Вчитель', 'Батько'
+
     try {
-        const {name, email, password} = req.body
+        const {name, email, password, role} = req.body
         const candidate = await User.findOne({email})
         if (candidate) {
             return res.status(400).json({message: `Користувач з поштою ${email} уже існує`})
         }
+        let _kind
+        switch(role){
+            case 'Учень': {
+                _kind = 'Student'
+                break
+            }
+            case 'Вчитель': {
+                _kind = 'Teacher'
+                break
+            }
+            case 'Батько': {
+                _kind = 'Parent'
+                break
+            }
+            default:
+                return res.status(400).json({message: 'Невірна роль'})
+        }
         const hashPassword = bcrypt.hashSync(password, 7)
-        const user = await User.create({
+        let user = await User.create({
             name,
             email,
-            password: hashPassword
+            password: hashPassword,
+            role,
+            kind: _kind
         })
         await user.save()
-        user.student = undefined
-        user.parent = undefined
-        user.teacher = undefined
-        user.__v = undefined
         const payload = {
             userId: user._id,
             userRole: user.role
         }
+        user.password = undefined
+        user._v = undefined
         const token = generateAccessToken(payload)
         return res.status(201).json({
             message: 'Аккаунт створено',
