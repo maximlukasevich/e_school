@@ -1,3 +1,5 @@
+const bcrypt = require('bcrypt')
+
 const {User} = require('../models/index')
 
 const UNNECESSARY_FIELDS = '-student -teacher -parent -password -__v -verified'
@@ -29,6 +31,22 @@ const getUser = async (req, res) => {
     }
 }
 
+const getUsersWithoutConfirmRole = async (req, res) => {
+    try {
+        if (!req.userId) {
+            return res.status(401).json({message: 'Необхідно авторизуватися'})
+        }
+        if (req.userRole !== 'Адмін') {
+            return res.search(403).json({message: 'Доступ заборонено'})
+        }
+        const users = await User.find({verifiedRole: false}).select(UNNECESSARY_FIELDS)
+        return res.status(200).json({users})
+    } catch (err) {
+        console.log(err)
+        return res.status(400)
+    }
+}
+
 const updateUser = async (req, res) => {
     // name: {
     //     firstName: {type: String, required: true},
@@ -43,7 +61,7 @@ const updateUser = async (req, res) => {
     //     zipCode: {type: String}
     // }
     if (!req.userId) {
-        return res.status(401).json({mesфsage: 'Необхідно авторизуватися'})
+        return res.status(401).json({message: 'Необхідно авторизуватися'})
     }
     if (req.userId !== req.params.user_id) {
         return res.status(403).json({message: 'Недостатньо прав'})
@@ -61,8 +79,33 @@ const updateUser = async (req, res) => {
     return res.status(200).json({message: 'Дані оновлено'})
 }
 
+const changePassword = async (req, res) => {
+    try {
+        if (!req.userId) {
+            return res.status(401).json({message: 'Необхідно авторизуватися'})
+        }
+        if (req.userId !== req.params.user_id) {
+            return res.status(403).json({message: 'Недостатньо прав'})
+        }
+        const {oldPassword, newPassword} = req.body
+        const user = await User.findById(req.userId)
+        const validPassword = bcrypt.compareSync(oldPassword, user.password)
+        if (!validPassword) {
+            return res.status(401).json({message: 'Невірний пароль'})
+        }
+        user.password = bcrypt.hashSync(newPassword, 7)
+        await user.save()
+        return res.status(200).json({message: 'Пароль змінено'})
+    } catch (err) {
+        console.log(err)
+        return res.status(400)
+    }
+}
+
 module.exports = {
     getUser,
     getAllUsers,
+    getUsersWithoutConfirmRole,
+    changePassword,
     updateUser,
 }
