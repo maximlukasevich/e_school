@@ -13,11 +13,12 @@ const generateAccessToken = (payload) => {
 const login = async (req, res) => {
     try {
         const {email, password} = req.body
-        const user = await User.findOne({email}).select(UNNECESSARY_FIELDS)
+        const user = await User.findOne({email}).select(UNNECESSARY_FIELDS.replace('-password', ''))
         if (!user) {
             return res.status(400).json({message: 'Такого користувача не існує'})
         }
         const validPassword = bcrypt.compareSync(password, user.password)
+        user.password = undefined
         if (!validPassword) {
             return res.status(401).json({message: 'Невірний пароль'})
         }
