@@ -51,8 +51,3 @@ module.exports = {
     Student: model('User', User).discriminator('Student', Student)
 }
 
-// module.exports = new model('User', User)
-// module.exports = model('User', User).discriminator('Teacher', Teacher)
-// module.exports = model('User', User).discriminator('Parent', Parent)
-// module.exports = model('User', User).discriminator('Student', Student)
-
