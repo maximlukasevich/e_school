@@ -19,7 +19,7 @@ const start = async () => {
             useNewUrlParser: true,
             useUnifiedTopology: true,
             useCreateIndex: true,
-            useFindAndModify: true
+            useFindAndModify: false
         }, () => {console.log('Successfully connected to MongoDB')})
         app.listen(PORT, HOST, () => console.log(`The server started on ${HOST}:${PORT}`))
     } catch (err) {
