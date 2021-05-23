@@ -1,14 +1,14 @@
-const {Schema, model, mongoose} = require('mongoose')
+const mongoose = require('mongoose')
 const slug = require('mongoose-slug-generator')
 
 mongoose.plugin(slug)
 
-const Lesson = new Schema({
+const Lesson = new mongoose.Schema({
     name: {type: String, required: true},
     slug: {type: String, slug: 'name', unique: true},
-    teachers: [{type: Schema.Types.ObjectId, ref: 'User'}],
-    classes: [{type: Schema.Types.ObjectId, ref: 'Class'}]
+    teachers: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
+    classes: [{type: mongoose.Schema.Types.ObjectId, ref: 'Class'}]
 })
 
-module.exports = new model('Lesson', Lesson)
+module.exports = new mongoose.model('Lesson', Lesson)
 
