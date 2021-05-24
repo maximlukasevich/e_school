@@ -97,21 +97,17 @@ const setClassTeacher = async (req, res) => {
 const setStudents = async (req, res) => {
     try {
         const {name} = req.params
+        const {userId} = req.body
         const _class = await Class.findOne({name})
         if (!_class) {
             return res.status(404).json({message: 'Такого класу не існує'})
         }
-        console.log(req.userRole, req.userId, _class.teacher)
-        if (req.userRole !== 'Адмін') {
+        if (req.userRole !== 'Адмін' && req.userId !== _class.teacher) {
             return res.status(403).json({message: 'Недостатньо прав'})
         }
-        const {students} = req.body
-        const studentsArray = new Map(Object.entries(students))
-        studentsArray.forEach((item, i, arr) => {
-            _class.students.push(item)
-        })
+        _class.students.push(userId)
         await _class.save()
-        return res.status(200).json({message: 'Учні додані'})
+        return res.status(200).json({message: 'Учня додано'})
     } catch (err) {
         console.log(err)
         return res.status(400).send('Bad request')
@@ -138,13 +134,13 @@ const deleteClass = async (req, res) => {
 
 const deleteStudent = async (req, res) => {
     try {
-        if (req.userRole !== 'Адмін') {
-            return res.status(403).json({message: 'Недостатньо прав'})
-        }
         const {name} = req.params
         const _class = await Class.findOne({name})
         if (!_class) {
             return res.status(400).json({message: 'Такого класу не існує'})
+        }
+        if (req.userRole !== 'Адмін' && req.userId !== _class.teacher) {
+            return res.status(403).json({message: 'Недостатньо прав'})
         }
         const {student} = req.body
         const studentId = _class.students.findIndex(student)
