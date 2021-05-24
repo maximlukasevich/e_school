@@ -1,4 +1,4 @@
-const {Lesson} = require('../models')
+const {Lesson, User, Grades} = require('../models')
 
 const getAllLessons = async (req, res) => {
     try {
@@ -47,7 +47,7 @@ const createLesson = async (req, res) => {
 
 const updateLesson = async (req, res) => {
     try {
-        const {name, teacher, classes} = req.body
+        const {name, teacher, schoolClass} = req.body
         const {slug} = req.params
         const userId = req.userId
         const userRole = req.userRole
@@ -60,11 +60,19 @@ const updateLesson = async (req, res) => {
         }
         lesson.name = name || lesson.name
         lesson.teacher = teacher || lesson.teacher
-        const classesArray = new Map(Object.entries(classes))
-        classesArray.forEach((item, i, arr) => {
-            lesson.classes.push(item)
-        })
+        lesson.class = schoolClass || lesson.class
         await lesson.save()
+
+        const users = await User.find({userClass: lesson.class, role: 'Учень'}).select('grades')
+
+        const usersArray = new Map(Object.entries(users))
+        let grade
+        usersArray.forEach((user, i, arr) => {
+            grade = Grades.create({lesson: lesson._id, student: user._id})
+            grade.save()
+        })
+
+        console.log(users)
         return res.status(200).json({message: 'Дані оновлено'})
     } catch (err) {
         console.log(err)
