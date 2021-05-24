@@ -13,13 +13,13 @@ const getAllUsers = async (req, res) => {
         return res.status(200).json({users: user})
     } catch (err) {
         console.log(err)
-        res.status(400)
+        res.status(400).send('Bad request')
     }
 }
 
 const getUser = async (req, res) => {
     try {
-        const userId = req.params.user_id
+        const userId = req.params.userId
         const user = await User.findById(userId).select(UNNECESSARY_FIELDS)
         if (!user) {
             return res.status(404).json({message: 'Такого корисутвача не існує'})
@@ -27,7 +27,7 @@ const getUser = async (req, res) => {
         return res.status(200).json({user})
     } catch (err) {
         console.log(err)
-        res.status(400)
+        res.status(400).send('Bad request')
     }
 }
 
@@ -43,7 +43,7 @@ const getUsersWithoutConfirmRole = async (req, res) => {
         return res.status(200).json({users})
     } catch (err) {
         console.log(err)
-        return res.status(400)
+        return res.status(400).send('Bad request')
     }
 }
 
@@ -60,23 +60,41 @@ const updateUser = async (req, res) => {
     //     apartments: {type: String},
     //     zipCode: {type: String}
     // }
-    if (!req.userId) {
-        return res.status(401).json({message: 'Необхідно авторизуватися'})
+    try {
+        if (!req.userId) {
+            return res.status(401).json({message: 'Необхідно авторизуватися'})
+        }
+        if (req.userId !== req.params.userId) {
+            return res.status(403).json({message: 'Недостатньо прав'})
+        }
+        const {name, phone, gender, address, birthday} = req.body
+        const update = {
+            name,
+            phone,
+            gender,
+            address,
+            birthday
+        }
+        const user = await User.findById(req.userId)
+        user.name.firstName = name.firstName || user.name.firstName
+        user.name.lastName = name.lastName || user.name.lastName
+        user.name.middleName = name.middleName || user.name.middleName
+        user.phone = phone || user.phone
+        user.gender = gender || user.gender || undefined
+        if (address) {
+            user.address.city = address.city || user.address.city
+            user.address.street = address.street || user.address.street
+            user.address.apartments = address.apartments || user.address.apartments
+            user.address.zipCode = address.zipCode || user.address.zipCode
+        }
+        user.birthday = birthday || user.birthday
+        await user.save()
+        return res.status(200).json({message: 'Дані оновлено'})
+    } catch (err) {
+        console.log(err)
+        return res.status(400).send('Bad request')
     }
-    if (req.userId !== req.params.user_id) {
-        return res.status(403).json({message: 'Недостатньо прав'})
-    }
-    const {name, phone, gender, address, birthday} = req.body
-    const update = {
-        name,
-        phone,
-        gender,
-        address,
-        birthday
-    }
-    const user = await User.findByIdAndUpdate(req.userId, update)
-    await user.save()
-    return res.status(200).json({message: 'Дані оновлено'})
+
 }
 
 const changePassword = async (req, res) => {
@@ -84,7 +102,7 @@ const changePassword = async (req, res) => {
         if (!req.userId) {
             return res.status(401).json({message: 'Необхідно авторизуватися'})
         }
-        if (req.userId !== req.params.user_id) {
+        if (req.userId !== req.params.userId) {
             return res.status(403).json({message: 'Недостатньо прав'})
         }
         const {oldPassword, newPassword} = req.body
@@ -98,7 +116,7 @@ const changePassword = async (req, res) => {
         return res.status(200).json({message: 'Пароль змінено'})
     } catch (err) {
         console.log(err)
-        return res.status(400)
+        return res.status(400).send('Bad request')
     }
 }
 

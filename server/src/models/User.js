@@ -37,7 +37,7 @@ const Teacher = new Schema({
 
 const Student = new Schema({
     userClass: {type: Schema.Types.ObjectId, ref: 'Class'},
-    grades: {type: Schema.Types.ObjectId, ref: 'Grades'},
+    grades: [{type: Schema.Types.ObjectId, ref: 'Grades'}],
     parents: {
          mother: {type: Schema.Types.ObjectId, ref: 'User'},
          father: {type: Schema.Types.ObjectId, ref: 'User'}
