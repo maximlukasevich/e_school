@@ -1,25 +1,17 @@
-import logo from './logo.svg';
-import './App.css';
+import './App.css'
+import NavbarPanel from "./components/NavbarPanel/NavbarPanel";
+import Login from "./components/Auth/Login/Login";
+import Registration from "./components/Auth/Registration/Registration";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    return (
+        <div>
+            <h1>app.js</h1>
+            <NavbarPanel auth={true} role={'Адмін'} username={'maxim.lukasevich@gmail.com'}/>
+            <Login />
+            <Registration />
+        </div>
+    )
 }
 
-export default App;
+export default App
