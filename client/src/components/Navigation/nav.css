@@ -1,0 +1,44 @@
+nav {
+  background-color: #1a1a1a;
+}
+nav .container {
+  display: flex;
+  justify-content: space-between;
+  height: 40px;
+}
+nav .container h1 {
+  padding: 0;
+  margin: auto 0;
+  color: #f98011;
+}
+nav .container ul {
+  margin: 0;
+  padding: 0;
+  height: 40px;
+  list-style: none;
+  display: flex;
+}
+nav .container ul li {
+  padding: 0;
+  margin: 0;
+  transition: 0.3s;
+}
+nav .container ul li a {
+  line-height: 40px;
+  margin: auto 0;
+  padding: 0 10px;
+  color: #fff;
+  font-size: 16px;
+  text-decoration: none;
+}
+nav .container ul li:hover {
+  background-color: #f98011;
+}
+
+.empty-div {
+  box-shadow: 0 5px 25px 2px #00000040;
+  height: 5px;
+  background-color: #f98011;
+}
+
+/*# sourceMappingURL=nav.css.map */
