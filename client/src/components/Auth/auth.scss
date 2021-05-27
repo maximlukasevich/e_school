@@ -1,0 +1,48 @@
+.container {
+  .input-form {
+    max-width: 280px;
+    margin: 0 auto;
+
+    h3 {
+      height: 40px;
+      background-color: #f98011;
+      color: #ffffff;
+      text-align: center;
+      line-height: 40px;
+      font-weight: normal;
+      font-size: 20px;
+      border-radius: 2px;
+      border-bottom: 2px solid #1a1a1a;
+    }
+
+    .inputs {
+      display: flex;
+      flex-direction: column;
+
+      label {
+        margin-bottom: 15px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+
+        Input {
+          margin: 10px 0;
+        }
+      }
+    }
+
+    .buttons {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+
+      Button {
+        padding: 5px 30px;
+      }
+      a {
+        margin-top: 20px;
+      }
+    }
+
+  }
+}
