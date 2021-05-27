@@ -8,40 +8,22 @@ const Login = () => {
         <div className="container">
             <div className="image" />
             <div className="input-form">
-                <h3>Реєстрація</h3>
-                    <div className="inputs">
-                        <label>
-                            Email
-                            <Input type='email' placeholder='Email'/>
-                        </label>
+                <h3>Вхід в аккаунт</h3>
+                <div className="inputs">
+                    <label>
+                        Email
+                        <Input type='email' placeholder='Email'/>
+                    </label>
 
-                        <label>
-                            Пароль
-                            <Input type='password' placeholder='Пароль'/>
-                        </label>
-                        <label>
-                            Повторіть пароль
-                            <Input type='password' placeholder='Повторіть пароль'/>
-                        </label>
-                        <label>
-                            Ім'я
-                            <Input type='password' placeholder="Ім'я"/>
-                        </label>
-                        <label>
-                            Фамілія
-                            <Input type='password' placeholder='Фамілія'/>
-                        </label>
-                        <label>
-                            По батькові
-                            <Input type='password' placeholder='По батькові'/>
-                        </label>
-                    </div>
+                    <label>
+                        Пароль
+                        <Input type='password' placeholder='Пароль'/>
+                    </label>
+                </div>
                 <div className="buttons">
-                    <Button value='Зареєструватися'/>
+                    <Button value='Увійти'/>
                 </div>
             </div>
-
-
         </div>
     );
 };

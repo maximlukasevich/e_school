@@ -1,5 +1,6 @@
 import React from 'react';
 import './nav.css'
+import {NavLink} from 'react-router-dom'
 
 const Navigation = (props) => {
     return (
@@ -14,8 +15,8 @@ const Navigation = (props) => {
                         <li><a>Вихід</a></li>
                     </>}
                     {!props.auth && <>
-                        <li><a href="">Увійти</a></li>
-                        <li><a href="">Зареєструватися</a></li>
+                        <NavLink to='/login' activeClassName='selected'><li>Увійти</li></NavLink>
+                        <NavLink to='/registration' activeClassName='selected'><li>Зареєструватися</li></NavLink>
                     </>}
                     </ul>
                 </div>
