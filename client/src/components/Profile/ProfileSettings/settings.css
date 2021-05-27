@@ -1,0 +1,43 @@
+.container .settings-header {
+  margin: 0;
+  padding: 15px 20px;
+  background-color: #f98011;
+  border-bottom: 2px solid #1a1a1a;
+  border-radius: 0 0 8px 8px;
+  color: #ffffff;
+}
+.container Button {
+  margin: 15px 20px;
+  font-size: 20px;
+}
+.container .settings-info {
+  padding: 15px 20px;
+  display: flex;
+  justify-content: space-around;
+}
+.container .settings-info .settings-block {
+  width: 25%;
+}
+.container .settings-info .settings-block label {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.container .settings-info .settings-block label Input, .container .settings-info .settings-block label select {
+  margin: 15px 0;
+}
+.container .settings-info .settings-block label select {
+  padding: 2px;
+  border: 0;
+  border-bottom: 2px solid #f98011;
+  border-radius: 2px;
+  font-size: 16px;
+  transition: 0.3s;
+}
+.container .settings-info .settings-block label select:focus {
+  border: 0;
+  outline: none;
+  border-bottom: 2px solid #1a1a1a;
+}
+
+/*# sourceMappingURL=settings.css.map */
