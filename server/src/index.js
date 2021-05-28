@@ -8,10 +8,7 @@ const PORT = process.env.PORT || 5000
 const HOST = process.env.HOST || 'localhost'
 const MONGO_URI = process.env.MONGO_URI
 
-const routes = require('./settings/routes')
-
 require('./settings/express')(app)
-app.use('/api', routes)
 
 const start = async () => {
     try {
