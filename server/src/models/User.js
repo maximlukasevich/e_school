@@ -5,22 +5,17 @@ const roles = ['Учень', 'Батько', 'Вчитель', 'Адмін', und
 const options = {discriminatorKey: 'kind'}
 
 const User = new Schema({
-    name: {
-        firstName: {type: String, required: true},
-        lastName: {type: String, required: true},
-        middleName: {type: String}
-    },
+    firstName: {type: String, required: true},
+    lastName: {type: String, required: true},
+    middleName: {type: String, required: true},
     email: {type: String, required: true, unique: true},
     password: {type: String, required: true},
-    phone: {type: String},
+    phone: {type: String, default: ''},
     gender: {type: String, enum: genders, default: undefined},
-    address: {
-        city: {type: String},
-        street: {type: String},
-        apartments: {type: String},
-        zipCode: {type: String}
-    },
-    birthday: {type: Date},
+    city: {type: String, default: ''},
+    street: {type: String, default: ''},
+    apartments: {type: String, default: ''},
+    zipCode: {type: String, default: ''},
     role: {type: String, enum: roles, default: undefined},
     verifiedRole: {type: Boolean, default: false},
     verifiedEmail: {type: Boolean, default: false},
@@ -38,10 +33,8 @@ const Teacher = new Schema({
 const Student = new Schema({
     userClass: {type: Schema.Types.ObjectId, ref: 'Class'},
     grades: [{type: Schema.Types.ObjectId, ref: 'Grades'}],
-    parents: {
-         mother: {type: Schema.Types.ObjectId, ref: 'User'},
-         father: {type: Schema.Types.ObjectId, ref: 'User'}
-    }
+    mother: {type: Schema.Types.ObjectId, ref: 'User'},
+    father: {type: Schema.Types.ObjectId, ref: 'User'}
 }, options)
 
 module.exports = {

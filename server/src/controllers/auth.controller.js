@@ -39,15 +39,9 @@ const login = async (req, res) => {
 }
 
 const registration = async (req, res) => {
-    // name: {
-    //      firstName: String,
-    //      lastName: String,
-    //      middleName: String
-    // }
     // role enums: 'Учень', 'Вчитель', 'Батько'
-
     try {
-        const {name, email, password, role} = req.body
+        const {firstName, lastName, middleName, email, password, role} = req.body
         const candidate = await User.findOne({email})
         if (candidate) {
             return res.status(400).json({message: `Користувач з поштою ${email} уже існує`})
@@ -71,7 +65,9 @@ const registration = async (req, res) => {
         }
         const hashPassword = bcrypt.hashSync(password, 7)
         let user = await User.create({
-            name,
+            firstName,
+            lastName,
+            middleName,
             email,
             password: hashPassword,
             role,

@@ -48,46 +48,32 @@ const getUsersWithoutConfirmRole = async (req, res) => {
 }
 
 const updateUser = async (req, res) => {
-    // name: {
-    //     firstName: {type: String, required: true},
-    //     lastName: {type: String, required: true},
-    //     middleName: {type: String}
-    // }
-
-    // address: {
-    //     city: {type: String},
-    //     street: {type: String},
-    //     apartments: {type: String},
-    //     zipCode: {type: String}
-    // }
     try {
         if (!req.userId) {
             return res.status(401).json({message: 'Необхідно авторизуватися'})
         }
+        console.log(req.userId, req.params.userId)
         if (req.userId !== req.params.userId) {
             return res.status(403).json({message: 'Недостатньо прав'})
         }
-        const {name, phone, gender, address, birthday} = req.body
+
+        const {
+            firstName, lastName, middleName,
+            phone, gender, city,
+            street, apartments, zipCode } = req.body
+
         const update = {
-            name,
+            firstName,
+            lastName,
+            middleName,
             phone,
             gender,
-            address,
-            birthday
+            city,
+            street,
+            apartments,
+            zipCode,
         }
-        const user = await User.findById(req.userId)
-        user.name.firstName = name.firstName || user.name.firstName
-        user.name.lastName = name.lastName || user.name.lastName
-        user.name.middleName = name.middleName || user.name.middleName
-        user.phone = phone || user.phone
-        user.gender = gender || user.gender || undefined
-        if (address) {
-            user.address.city = address.city || user.address.city
-            user.address.street = address.street || user.address.street
-            user.address.apartments = address.apartments || user.address.apartments
-            user.address.zipCode = address.zipCode || user.address.zipCode
-        }
-        user.birthday = birthday || user.birthday
+        const user = await User.findByIdAndUpdate(req.userId, update)
         await user.save()
         return res.status(200).json({message: 'Дані оновлено'})
     } catch (err) {
