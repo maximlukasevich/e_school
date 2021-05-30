@@ -1,9 +1,16 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Input from '../commons/Input/Input'
-import Button from "../commons/Button/Button";
 import './auth.css'
+import {login} from "../../store/User/action";
+import {useDispatch} from "react-redux";
 
 const Login = () => {
+
+    const [email, setEmail] = useState('')
+    const [password, setPassword] = useState('')
+
+    const dispatch = useDispatch()
+
     return (
         <div className="container">
             <div className="image" />
@@ -12,16 +19,26 @@ const Login = () => {
                 <div className="inputs">
                     <label>
                         Email
-                        <Input type='email' placeholder='Email'/>
+                        <Input
+                            type={'email'}
+                            placeholder={'mail@example.com'}
+                            value={email}
+                            setValue={setEmail}
+                        />
                     </label>
 
                     <label>
                         Пароль
-                        <Input type='password' placeholder='Пароль'/>
+                        <Input
+                            type={'password'}
+                            placeholder={'Пароль'}
+                            value={password}
+                            setValue={setPassword}
+                        />
                     </label>
                 </div>
                 <div className="buttons">
-                    <Button value='Увійти'/>
+                    <button onClick={() => {dispatch(login(email, password))}}> Увійти </button>
                 </div>
             </div>
         </div>

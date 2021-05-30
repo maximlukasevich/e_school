@@ -26,6 +26,19 @@
 .container .input-form .inputs label Input {
   margin: 10px 0;
 }
+.container .input-form .inputs label select {
+  padding: 2px;
+  border: 0;
+  border-bottom: 2px solid #f98011;
+  border-radius: 2px;
+  font-size: 16px;
+  transition: 0.3s;
+}
+.container .input-form .inputs label select:focus {
+  border: 0;
+  outline: none;
+  border-bottom: 2px solid #1a1a1a;
+}
 .container .input-form .buttons {
   display: flex;
   flex-direction: column;
