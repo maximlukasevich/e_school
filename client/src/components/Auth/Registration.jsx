@@ -1,9 +1,8 @@
 import React, {useState} from 'react';
-import {registration} from "../../store/User/action";
+import {registration} from "../../store/CurrentUser/action";
 import {useDispatch} from "react-redux";
-
-import Input from '../commons/Input/Input'
-import './auth.css'
+import {Button, Card, Col, Form} from "react-bootstrap";
+import {NavLink} from "react-router-dom";
 
 
 const Registration = () => {
@@ -16,95 +15,93 @@ const Registration = () => {
     const [repeatPassword, setRepeatPassword] = useState('')
     const [role, setRole] = useState('Учень')
 
-    const roleHandler = (e) => {
-        setRole(e.target.value)
-    }
-
     const dispatch = useDispatch()
+
+    const submitHandler = (e) => {
+        dispatch(registration(firstName, lastName, middleName, email, password, role))
+    }
 
     return (
         <div className="container">
-            <div className="image" />
-            <div className="input-form">
-                <h3>Реєстрація</h3>
-                <div className="inputs">
-                    <label>
-                        Email
-                        <Input
-                            type={'email'}
-                            placeholder={'Email'}
-                            value={email}
-                            setValue={setEmail}
-                        />
-                    </label>
+            <Card className="my-3 mx-auto" style={{ width: '40rem' }}>
+                <Card.Body>
+                    <Card.Title>Реєстрація</Card.Title>
+                    <Card.Subtitle className="mb-2 text-muted">
+                        Заповніть поля та натисніть кнопку "Зареєструватися"
+                    </Card.Subtitle>
+                    <hr/>
+                    <Form>
+                        <Form.Group controlId="">
+                            <Form.Label>Email</Form.Label>
+                            <Form.Control
+                                value={email}
+                                onChange={e => setEmail(e.target.value)}
+                                type="email"
+                                placeholder="Email" />
+                        </Form.Group>
+                        <Form.Group controlId="">
+                            <Form.Label>Пароль</Form.Label>
+                            <Form.Control
+                                value={password}
+                                onChange={e => setPassword(e.target.value)}
+                                type="password"
+                                placeholder="Пароль" />
+                        </Form.Group>
+                        <Form.Group controlId="">
+                            <Form.Label>Повторіть пароль</Form.Label>
+                            <Form.Control
+                                value={repeatPassword}
+                                onChange={e => setRepeatPassword(e.target.value)}
+                                type="password"
+                                placeholder="Повторіть пароль" />
+                        </Form.Group>
+                        <Form.Row>
+                            <Form.Group as={Col} controlId="">
+                                <Form.Label>Ім'я</Form.Label>
+                                <Form.Control
+                                    value={firstName}
+                                    onChange={e => setFirstName(e.target.value)}
+                                    type="text"
+                                    placeholder="Ім'я" />
+                            </Form.Group>
+                            <Form.Group as={Col} controlId="">
+                                <Form.Label>Фамілія</Form.Label>
+                                <Form.Control
+                                    value={lastName}
+                                    onChange={e => setLastName(e.target.value)}
+                                    type="text"
+                                    placeholder="Фамілія" />
+                            </Form.Group>
+                            <Form.Group as={Col} controlId="">
+                                <Form.Label>По батькові</Form.Label>
+                                <Form.Control
+                                    value={middleName}
+                                    onChange={e => setMiddleName(e.target.value)}
+                                    type="text"
+                                    placeholder="По батькові" />
+                            </Form.Group>
+                        </Form.Row>
+                        <Form.Row>
+                            <Form.Group as={Col} controlId="">
+                                <Form.Label>Тип користувача</Form.Label>
+                                <Form.Control
+                                    onChange={e => setRole(e.target.value)}
+                                    as="select"
+                                    defaultValue={role || null} >
+                                    <option selected disabled value={null}>Оберіть тип користувача</option>
+                                    <option value='Учень'>Учень</option>
+                                    <option value='Батько'>Батько</option>
+                                    <option value='Вчитель'>Вчитель</option>
+                                </Form.Control>
+                            </Form.Group>
+                        </Form.Row>
 
-                    <label>
-                        Пароль
-                        <Input
-                            type={'password'}
-                            placeholder={'Пароль'}
-                            value={password}
-                            setValue={setPassword}
-                        />
-                    </label>
-                    <label>
-                        Повторіть пароль
-                        <Input
-                            type={'password'}
-                            placeholder={'Повторіть пароль'}
-                            value={repeatPassword}
-                            setValue={setRepeatPassword}
-                        />
-                    </label>
-                    <label>
-                        Ім'я
-                        <Input
-                            type={'text'}
-                            placeholder={'Ім\'я'}
-                            value={firstName}
-                            setValue={setFirstName}
-                        />
-                    </label>
-                    <label>
-                        Фамілія
-                        <Input
-                            type={'text'}
-                            placeholder={'Фамілія'}
-                            value={lastName}
-                            setValue={setLastName}
-                        />
-                    </label>
-                    <label>
-                        По батькові
-                        <Input
-                            type={'text'}
-                            placeholder={'По батькові'}
-                            value={middleName}
-                            setValue={setMiddleName}
-                        />
-                    </label>
 
-                    <label>
-                        Статус
-                        <select onChange={(e) => {roleHandler(e)}}>
-                            <option value="Учень">Учень</option>
-                            <option value="Батько">Батько</option>
-                            <option value="Вчитель">Вчитель</option>
-                        </select>
-                    </label>
-
-                </div>
-                <div className="buttons">
-                    <button onClick={() => {dispatch(registration(
-                        firstName,
-                        lastName,
-                        middleName,
-                        email,
-                        password,
-                        role
-                    ))}}> Зареєструватися </button>
-                </div>
-            </div>
+                        <Button onClick={e => submitHandler(e)}>Зареєструватися</Button>
+                    </Form>
+                </Card.Body>
+                <Card.Footer><NavLink to={'/login'}>Увійти в існуючий аккаунт</NavLink></Card.Footer>
+            </Card>
         </div>
     );
 };

@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
-import Input from '../commons/Input/Input'
-import './auth.css'
-import {login} from "../../store/User/action";
+import {login} from "../../store/CurrentUser/action";
 import {useDispatch} from "react-redux";
+import {Button, Card, Col, Form, Row} from "react-bootstrap";
+import {NavLink} from "react-router-dom";
 
 const Login = () => {
 
@@ -11,36 +11,41 @@ const Login = () => {
 
     const dispatch = useDispatch()
 
+    const submitHandler = (e) => {
+        dispatch(login(email, password))
+    }
+
     return (
         <div className="container">
-            <div className="image" />
-            <div className="input-form">
-                <h3>Вхід в аккаунт</h3>
-                <div className="inputs">
-                    <label>
-                        Email
-                        <Input
-                            type={'email'}
-                            placeholder={'mail@example.com'}
-                            value={email}
-                            setValue={setEmail}
-                        />
-                    </label>
-
-                    <label>
-                        Пароль
-                        <Input
-                            type={'password'}
-                            placeholder={'Пароль'}
-                            value={password}
-                            setValue={setPassword}
-                        />
-                    </label>
-                </div>
-                <div className="buttons">
-                    <button onClick={() => {dispatch(login(email, password))}}> Увійти </button>
-                </div>
-            </div>
+            <Card className="my-3 mx-auto" style={{ width: '20rem' }}>
+                <Card.Body>
+                    <Card.Title>Вхід</Card.Title>
+                    <Card.Subtitle className="mb-2 text-muted">
+                        Заповніть поля та натисніть кнопку "Увійти"
+                    </Card.Subtitle>
+                    <hr/>
+                    <Form>
+                        <Form.Group controlId="formGroupEmail">
+                            <Form.Label>Email</Form.Label>
+                            <Form.Control
+                                value={email}
+                                onChange={e => setEmail(e.target.value)}
+                                type="email"
+                                placeholder="Enter" />
+                        </Form.Group>
+                        <Form.Group controlId="formGroupPassword">
+                            <Form.Label>Пароль</Form.Label>
+                            <Form.Control
+                                value={password}
+                                onChange={e => setPassword(e.target.value)}
+                                type="password"
+                                placeholder="Пароль" />
+                        </Form.Group>
+                        <Button onClick={e => submitHandler(e)}>Увійти</Button>
+                    </Form>
+                </Card.Body>
+                <Card.Footer><NavLink to={'/registration'}>Створити аккаунт</NavLink></Card.Footer>
+            </Card>
         </div>
     );
 };
