@@ -1,4 +1,3 @@
-import './App.css';
 import {BrowserRouter, Switch, Route, Redirect} from 'react-router-dom'
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
@@ -14,8 +13,6 @@ import Classes from "./components/Classes/Classes";
 import UserProfile from "./components/UserProfile/UserProfile";
 import UserSettings from "./components/UserProfile/UserSettings";
 import {getClassesThunk} from "./store/Class/action";
-
-
 
 function App() {
 
