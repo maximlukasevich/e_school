@@ -14,7 +14,6 @@ module.exports = (req, res, next) => {
         req.userRole = decodedToken.userRole
         next()
     } catch (err) {
-        console.log(err)
         next()
     }
 }

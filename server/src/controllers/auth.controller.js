@@ -13,14 +13,14 @@ const generateAccessToken = (payload) => {
 const login = async (req, res) => {
     try {
         const {email, password} = req.body
-        const user = await User.findOne({email}).select(UNNECESSARY_FIELDS.replace('-password', ''))
+        const user = await User.findOne({email}).select(UNNECESSARY_FIELDS.replace('-password', '')).populate('userClass')
         if (!user) {
             return res.status(400).json({message: 'Такого користувача не існує'})
         }
         const validPassword = bcrypt.compareSync(password, user.password)
         user.password = undefined
         if (!validPassword) {
-            return res.status(401).json({message: 'Невірний пароль'})
+            return res.status(400).json({message: 'Невірний пароль'})
         }
         const payload = {
             userId: user._id,
@@ -97,7 +97,7 @@ const auth = async (req, res) => {
         if (!req.userId) {
             return res.status(401).json({message: 'Необхідно авторизуватися'})
         }
-        const user = await User.findById(req.userId).select(UNNECESSARY_FIELDS)
+        const user = await User.findById(req.userId).select(UNNECESSARY_FIELDS).populate('userClass')
         if (!user) {
             return res.status(400).json({message: 'Таокго користувача не існує'})
         }

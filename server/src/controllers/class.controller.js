@@ -4,8 +4,8 @@ const UNNECESSARY_FIELDS = '-password -verifiedRole -verifiedEmail -role -__v -k
 
 const getClasses = async (req, res) => {
     try {
-        const classes = await Class.find()
-        return res.status(200).json({classes}).select('-__v')
+        const classes = await Class.find().select('-__v').populate('students lessons')
+        return res.status(200).json({classes})
     } catch (err) {
         console.log(err)
         return res.status(400)
@@ -102,7 +102,7 @@ const setStudents = async (req, res) => {
         if (!_class) {
             return res.status(404).json({message: 'Такого класу не існує'})
         }
-        if (req.userRole !== 'Адмін' && req.userId !== _class.teacher) {
+        if (req.userRole !== 'Адмін' && req.userId !== _class.teacher && req.userId !== userId) {
             return res.status(403).json({message: 'Недостатньо прав'})
         }
         _class.students.push(userId)

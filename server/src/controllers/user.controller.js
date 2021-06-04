@@ -6,7 +6,7 @@ const UNNECESSARY_FIELDS = '-student -teacher -parent -password -__v -verified'
 
 const getAllUsers = async (req, res) => {
     try {
-        const user = await User.find().select(UNNECESSARY_FIELDS)
+        const user = await User.find().select(UNNECESSARY_FIELDS, 'userClass')
         if (!user) {
             return res.status(404).json({message: 'Користувачів не знайдено'})
         }
@@ -20,7 +20,7 @@ const getAllUsers = async (req, res) => {
 const getUser = async (req, res) => {
     try {
         const userId = req.params.userId
-        const user = await User.findById(userId).select(UNNECESSARY_FIELDS)
+        const user = await User.findById(userId).select(UNNECESSARY_FIELDS, 'userClass')
         if (!user) {
             return res.status(404).json({message: 'Такого корисутвача не існує'})
         }
@@ -39,7 +39,7 @@ const getUsersWithoutConfirmRole = async (req, res) => {
         if (req.userRole !== 'Адмін') {
             return res.search(403).json({message: 'Доступ заборонено'})
         }
-        const users = await User.find({verifiedRole: false}).select(UNNECESSARY_FIELDS)
+        const users = await User.find({verifiedRole: false}).select(UNNECESSARY_FIELDS, 'userClass')
         return res.status(200).json({users})
     } catch (err) {
         console.log(err)
@@ -52,7 +52,6 @@ const updateUser = async (req, res) => {
         if (!req.userId) {
             return res.status(401).json({message: 'Необхідно авторизуватися'})
         }
-        console.log(req.userId, req.params.userId)
         if (req.userId !== req.params.userId) {
             return res.status(403).json({message: 'Недостатньо прав'})
         }
@@ -106,10 +105,30 @@ const changePassword = async (req, res) => {
     }
 }
 
+const setClass = async (req, res) => {
+    try {
+        const {classId} = req.body
+        if (!req.userId) {
+            return res.status(401).json({message: 'Необхідно авторизуватися'})
+        }
+        if (req.userId !== req.params.userId) {
+            return res.status(403).json({message: 'Недостатньо прав'})
+        }
+        const user = await User.findById(req.userId)
+        user.userClass = classId
+        await user.save()
+        return res.status(200).json({message: 'Клас змінено'})
+    } catch (err) {
+        console.log(err)
+        return res.status(400).send('Bad request')
+    }
+}
+
 module.exports = {
     getUser,
     getAllUsers,
     getUsersWithoutConfirmRole,
     changePassword,
     updateUser,
+    setClass
 }
