@@ -15,7 +15,6 @@ export const login = (email, password) => {
         }
     } catch (err) {
         alert('Невірний логін та\\або пароль')
-        console.log(err)
     }
 }
 
@@ -47,7 +46,7 @@ export const update = (
     firstName, lastName, middleName,
     phone, gender, city,
     street, apartments, zipCode,
-    birthday, userId) => {
+    userId ) => {
     try {
         return async (dispatch) => {
             const res = await axios.put(`http://localhost:5000/api/users/${userId}`, {
@@ -65,7 +64,27 @@ export const update = (
                     Authorization: `Bearer ${localStorage.getItem('token')}`
                 }
             })
+            dispatch(auth())
             alert(res.data.message)
+        }
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+export const setStudentClass = (classId, userId) => {
+    try {
+        return async (dispatch) => {
+            const res = await axios.put(`http://localhost:5000/api/users/${userId}/class`, {
+                classId
+            }, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+            alert(res.data.message)
+            dispatch(auth())
+            console.log(res)
         }
     } catch (err) {
         console.log(err)
@@ -88,6 +107,8 @@ export const auth = () => {
         localStorage.removeItem('token')
     }
 }
+
+
 
 
 
