@@ -1,7 +1,7 @@
 const {Schema, model} = require('mongoose')
 
-const genders = ['Чоловіча', 'Жіноча', undefined]
-const roles = ['Учень', 'Батько', 'Вчитель', 'Адмін', undefined]
+const genders = ['Чоловіча', 'Жіноча', null]
+const roles = ['Учень', 'Батько', 'Вчитель', 'Адмін', null]
 const options = {discriminatorKey: 'kind'}
 
 const User = new Schema({
@@ -11,12 +11,12 @@ const User = new Schema({
     email: {type: String, required: true, unique: true},
     password: {type: String, required: true},
     phone: {type: String, default: ''},
-    gender: {type: String, enum: genders, default: undefined},
+    gender: {type: String, enum: genders, default: null},
     city: {type: String, default: ''},
     street: {type: String, default: ''},
     apartments: {type: String, default: ''},
     zipCode: {type: String, default: ''},
-    role: {type: String, enum: roles, default: undefined},
+    role: {type: String, enum: roles, default: null},
     verifiedRole: {type: Boolean, default: false},
     verifiedEmail: {type: Boolean, default: false},
 }, options)

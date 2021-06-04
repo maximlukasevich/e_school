@@ -6,7 +6,7 @@ const UNNECESSARY_FIELDS = '-student -teacher -parent -password -__v -verified'
 
 const getAllUsers = async (req, res) => {
     try {
-        const user = await User.find().select(UNNECESSARY_FIELDS, 'userClass')
+        const user = await User.find().select(UNNECESSARY_FIELDS).populate('userClass')
         if (!user) {
             return res.status(404).json({message: 'Користувачів не знайдено'})
         }
@@ -20,7 +20,7 @@ const getAllUsers = async (req, res) => {
 const getUser = async (req, res) => {
     try {
         const userId = req.params.userId
-        const user = await User.findById(userId).select(UNNECESSARY_FIELDS, 'userClass')
+        const user = await User.findById(userId).select(UNNECESSARY_FIELDS).populate('userClass')
         if (!user) {
             return res.status(404).json({message: 'Такого корисутвача не існує'})
         }
