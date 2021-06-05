@@ -9,14 +9,11 @@ export default function classReducer(state = initialState, action) {
         case SET_CLASSES:
             return {
                 ...state,
-                classes: [...state.classes, action.payload]
+                classes: action.payload
             }
         default:
             return state
     }
 }
 
-export const setClasses = (classes) => ({
-    type: SET_CLASSES,
-    payload: classes
-})
+export const setClasses = (classes) => ({type: SET_CLASSES, payload: classes})

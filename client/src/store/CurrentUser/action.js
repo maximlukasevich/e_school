@@ -34,11 +34,29 @@ export const registration = (firstName, lastName, middleName, email, password, r
                 dispatch(setUser(res.data.user))
                 localStorage.setItem('token', res.data.token)
             } catch (e) {
-                console.log(e)
+                alert(e)
             }
         }
     } catch (err) {
         console.log(err)
+    }
+}
+
+
+export const auth = () => {
+    try {
+        return async (dispatch) => {
+            const res = await axios.get('http://localhost:5000/api/auth/auth', {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('token')}`
+                }
+            })
+            dispatch(setUser(res.data.user))
+            localStorage.setItem('token', res.data.token)
+        }
+    } catch (err) {
+        console.log(err)
+        localStorage.removeItem('token')
     }
 }
 
@@ -88,23 +106,6 @@ export const setStudentClass = (classId, userId) => {
         }
     } catch (err) {
         console.log(err)
-    }
-}
-
-export const auth = () => {
-    try {
-        return async (dispatch) => {
-            const res = await axios.get('http://localhost:5000/api/auth/auth', {
-                headers: {
-                    Authorization: `Bearer ${localStorage.getItem('token')}`
-                }
-            })
-            dispatch(setUser(res.data.user))
-            localStorage.setItem('token', res.data.token)
-        }
-    } catch (err) {
-        console.log(err)
-        localStorage.removeItem('token')
     }
 }
 
