@@ -8,9 +8,9 @@ const Navigation = (props) => {
 
     const user = useSelector((state) => state.user.user)
     const isAuth = useSelector((state) => state.user.isAuth)
-
     let userClass
-    if (user.role === 'Учень' && user.userClass) {
+
+    if (user && user.role === 'Учень' && user.userClass) {
         userClass = user.userClass.name
     }
 
@@ -83,7 +83,6 @@ const Navigation = (props) => {
                                     <NavDropdown.Item onClick={e => logOutHandler(e)}>Вийти</NavDropdown.Item>
                                 </NavDropdown>
                             </>}
-
                         </Nav>
                     </Navbar.Collapse>
                 </div>

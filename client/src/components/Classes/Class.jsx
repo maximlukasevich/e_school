@@ -1,11 +1,31 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import {useParams} from "react-router";
+import {connect, useDispatch} from "react-redux";
+import {Container} from "react-bootstrap";
+import {getClassesThunk} from "../../store/Class/action";
+import {getClassByClassName} from "../../store/Class/selectors";
 
-const Class = () => {
+const Class = ({classes, getClassByClassName}) => {
+
+    const {className} = useParams()
+    console.log(getClassByClassName)
+
+    const dispatch = useDispatch()
+    useEffect(() => {
+        dispatch(getClassesThunk())
+    }, [])
+
     return (
-        <div>
-
-        </div>
+        <Container>
+            {className}
+        </Container>
     );
 };
 
-export default Class;
+const mapStateToProps = (state) => {
+    return {
+        classes: state.classes.classes
+    }
+}
+
+export default connect(mapStateToProps, {getClassByClassName})(Class);

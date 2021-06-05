@@ -1,5 +1,5 @@
-import React, {useEffect} from 'react';
-import {connect, useDispatch, useSelector} from 'react-redux';
+import React from 'react';
+import {connect} from 'react-redux';
 import {Card, CardColumns, Tab, Tabs} from "react-bootstrap";
 import cardBgImage from '../../assets/images/profile/bg.jpg'
 
@@ -13,7 +13,7 @@ const UserProfile = ({user}) => {
                     <Card.Title>{user.lastName} {user.firstName} {user.middleName}</Card.Title>
                     <Card.Text>
                         Статус: {user.role}
-                        {user.role === 'Учень' && <> | Клас: {user.userClass.name}</>}
+                        {(user.role === 'Учень' && user.userClass) && <> | Клас: {user.userClass.name}</>}
                     </Card.Text>
 
                 </Card.ImgOverlay>

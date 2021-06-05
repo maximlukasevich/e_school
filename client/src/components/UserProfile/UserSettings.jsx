@@ -1,9 +1,12 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {connect, useDispatch} from "react-redux";
 import {Button, Card, CardColumns, Col, Form} from "react-bootstrap";
 import {setStudentClass, update} from "../../store/CurrentUser/action";
+import {getClassesThunk} from "../../store/Class/action";
 
 const UserSettings = ({user, classes}) => {
+
+    console.log(classes)
 
     let userClassId = null
     if (user.userClass) {
@@ -22,6 +25,10 @@ const UserSettings = ({user, classes}) => {
     const [userClass, setUserClass] = useState(userClassId)
 
     const dispatch = useDispatch()
+
+    useEffect(() => {
+        dispatch(getClassesThunk())
+    }, [])
 
     const saveSettingsHandler = (e) => {
         dispatch(update(
