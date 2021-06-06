@@ -2,7 +2,7 @@ const {Lesson, User, Grades} = require('../models')
 
 const getAllLessons = async (req, res) => {
     try {
-        const lessons = await Lesson.find().select('-__v')
+        const lessons = await Lesson.find().select('-__v').populate('class teacher')
         return res.status(200).json(lessons)
     } catch (err) {
         console.log(err)
@@ -13,11 +13,11 @@ const getAllLessons = async (req, res) => {
 const getLesson = async (req, res) => {
     try {
         const {slug} = req.params
-        const lesson = await Lesson.findOne({slug})
+        const lesson = await Lesson.findOne(slug)
         if (!lesson) {
             return res.status(404).json({message: 'Такого уроку не існує'})
         }
-        return res.status(200).json({lesson})
+        return res.status(200).json(lesson)
     } catch (err) {
         console.log(err)
         return res.status(400).send('Bad request')
@@ -26,17 +26,12 @@ const getLesson = async (req, res) => {
 
 const createLesson = async (req, res) => {
     try {
-        const {name} = req.body
+        const {name, classId} = req.body
         const userRole = req.userRole
         if (userRole !== 'Адмін' && userRole !== 'Вчитель') {
             return res.status(403).json({message: 'Недостатньо прав'})
         }
-        let lesson
-        if (userRole === 'Вчитель') {
-            lesson = await Lesson.create({name, teacher: req.userId})
-        } else {
-            lesson = await Lesson.create({name})
-        }
+        const lesson = await Lesson.create({name, class: classId, teacher: req.userId})
         await lesson.save()
         return res.status(200).json({message: 'Урок створено'})
     } catch (err) {

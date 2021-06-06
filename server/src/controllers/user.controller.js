@@ -6,11 +6,11 @@ const UNNECESSARY_FIELDS = '-student -teacher -parent -password -__v -verified'
 
 const getAllUsers = async (req, res) => {
     try {
-        const user = await User.find().select(UNNECESSARY_FIELDS).populate('userClass')
-        if (!user) {
+        const users = await User.find().select(UNNECESSARY_FIELDS).populate('userClass')
+        if (!users) {
             return res.status(404).json({message: 'Користувачів не знайдено'})
         }
-        return res.status(200).json({users: user})
+        return res.status(200).json(users)
     } catch (err) {
         console.log(err)
         res.status(400).send('Bad request')

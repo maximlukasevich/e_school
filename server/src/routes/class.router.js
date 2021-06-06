@@ -15,7 +15,7 @@ router.put('/:name/teacher', authMiddleware, classController.setClassTeacher)
 router.delete('/:name/teacher', authMiddleware, classController.deleteTeacher)
 
 router.get('/:name/students', classController.getClassStudents)
-router.put('/:name/students', authMiddleware, classController.setStudents)
-router.delete('/:name/students', authMiddleware, classController.deleteStudent)
+
+router.get('/:name/lessons', classController.getClassLessons)
 
 module.exports = router

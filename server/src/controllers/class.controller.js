@@ -1,11 +1,11 @@
-const {Class} = require('../models')
+const {Class, User, Lesson} = require('../models')
 
 const UNNECESSARY_FIELDS = '-password -verifiedRole -verifiedEmail -role -__v -kind'
 
 const getClasses = async (req, res) => {
     try {
-        const classes = await Class.find().select('-__v').populate('students lessons')
-        return res.status(200).json({classes})
+        const classes = await Class.find().select('-__v').populate('students lessons teacher')
+        return res.status(200).json(classes)
     } catch (err) {
         console.log(err)
         return res.status(400)
@@ -29,14 +29,29 @@ const getClass = async (req, res) => {
 const getClassStudents = async (req, res) => {
     try {
         const {name} = req.params
-        const _class = await Class.findOne({name}).select('students -_id').populate('students', UNNECESSARY_FIELDS)
-        if (!_class) {
-            return res.status(404).json({message: 'Такого класу не існує'})
+        const uClass = await Class.findOne({name})
+        if (!uClass) {
+            return res.status(400).json({message: 'Такого класу не існує'})
         }
-        return res.status(200).json(_class)
+        const users = await User.find({userClass: uClass._id }).select(UNNECESSARY_FIELDS)
+        return res.status(200).json(users)
     } catch (err) {
         console.log(err)
         return res.status(400)
+    }
+}
+
+const getClassLessons = async (req, res) => {
+    try {
+        const {name} = req.params
+        const uClass = await Class.findOne({name})
+        if (!uClass) {
+            return res.status(400).json({message: 'Такого класу не існує'})
+        }
+        const lessons = await Lesson.find({class: uClass._id }).select(UNNECESSARY_FIELDS).populate('teacher')
+        return res.status(200).json(lessons)
+    } catch (err) {
+        console.log(err)
     }
 }
 
@@ -94,27 +109,6 @@ const setClassTeacher = async (req, res) => {
     }
 }
 
-const setStudents = async (req, res) => {
-    try {
-        const {name} = req.params
-        const {userId} = req.body
-        const _class = await Class.findOne({name})
-        if (!_class) {
-            return res.status(404).json({message: 'Такого класу не існує'})
-        }
-        if (req.userRole !== 'Адмін' && req.userId !== _class.teacher && req.userId !== userId) {
-            return res.status(403).json({message: 'Недостатньо прав'})
-        }
-        _class.students.push(userId)
-        await _class.save()
-        return res.status(200).json({message: 'Учня додано'})
-    } catch (err) {
-        console.log(err)
-        return res.status(400).send('Bad request')
-    }
-}
-
-
 const deleteClass = async (req, res) => {
     try {
         if (req.userRole !== 'Адмін') {
@@ -125,27 +119,6 @@ const deleteClass = async (req, res) => {
         if (!_class) {
             return res.status(400).json({message: 'Такого класу не існує'})
         }
-        return res.status(200).json({message: `Клас ${name} видалено`})
-    } catch (err) {
-        console.log(err)
-        return res.status(400).send('Bad Request')
-    }
-}
-
-const deleteStudent = async (req, res) => {
-    try {
-        const {name} = req.params
-        const _class = await Class.findOne({name})
-        if (!_class) {
-            return res.status(400).json({message: 'Такого класу не існує'})
-        }
-        if (req.userRole !== 'Адмін' && req.userId !== _class.teacher) {
-            return res.status(403).json({message: 'Недостатньо прав'})
-        }
-        const {student} = req.body
-        const studentId = _class.students.findIndex(student)
-        _class.students.save(studentId, studentId)
-        await _class.save()
         return res.status(200).json({message: `Клас ${name} видалено`})
     } catch (err) {
         console.log(err)
@@ -174,11 +147,10 @@ module.exports = {
     getClasses,
     getClass,
     getClassStudents,
+    getClassLessons,
     getClassTeacher,
     createClass,
     setClassTeacher,
-    setStudents,
     deleteClass,
     deleteTeacher,
-    deleteStudent
 }
