@@ -24,7 +24,7 @@ const Navigation = (props) => {
         <div>
             <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
                 <div className="container">
-                    <Navbar.Brand href="#home">E-School</Navbar.Brand>
+                    <Navbar.Brand>E-School</Navbar.Brand>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav" />
                     <Navbar.Collapse id="responsive-navbar-nav">
                         <Nav className="mr-auto">

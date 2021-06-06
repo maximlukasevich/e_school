@@ -7,7 +7,7 @@ const Footer = () => {
             <Container>
                 <h1>E-School</h1>
                 <p>
-                    Footer у відпустці.
+                    Виникли технічні шоколадки, footer пішов у відпустку
                 </p>
             </Container>
         </Jumbotron>

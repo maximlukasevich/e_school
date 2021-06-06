@@ -2,8 +2,6 @@ import {BrowserRouter, Switch, Route, Redirect} from 'react-router-dom'
 import {useDispatch, useSelector} from "react-redux";
 import {useEffect} from "react";
 import {auth} from "./store/CurrentUser/action";
-import {getUsers} from "./store/Users/action";
-
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Navigation from "./components/Navigation/Navigation";
 import Login from "./components/Auth/Login";
@@ -12,9 +10,9 @@ import Class from "./components/Classes/Class";
 import Classes from "./components/Classes/Classes";
 import UserProfile from "./components/UserProfile/UserProfile";
 import UserSettings from "./components/UserProfile/UserSettings";
-import {getClassesThunk} from "./store/Class/action";
+import Footer from "./components/Footer/Footer";
 
-function App() {
+const App = () => {
 
     const dispatch = useDispatch()
 
@@ -22,16 +20,14 @@ function App() {
         dispatch(auth())
     }, [])
 
-    useEffect(() => {
-        dispatch(getClassesThunk())
-    }, [])
 
-    useEffect(() => {
-        dispatch(getUsers())
-    }, [])
+    const isAuth = useSelector(state => state.user.isAuth)
+    const user = useSelector(state => state.user.user)
+    let userId
+    if (user) {
+        userId = user._id
+    }
 
-    const isAuth = useSelector((state) => state.user.isAuth)
-    const userId = useSelector((state) => state.user.user._id)
 
     return (
         <BrowserRouter>
@@ -53,7 +49,7 @@ function App() {
                         <Route exact path='/classes/:className'>
                             <Class />
                         </Route>
-                        <Route exact path='/users/:id'>
+                        <Route exact path='/users/:userId'>
                             <UserProfile />
                         </Route>
                         <Route exact path={`/users/${userId}/settings`}>
@@ -62,8 +58,8 @@ function App() {
                         <Redirect to={`/users/${userId}`} />
                     </> }
                 </Switch>
+            <Footer />
         </BrowserRouter>
     );
-}
-
+};
 export default App;
