@@ -6,7 +6,7 @@ mongoose.plugin(slug)
 const Lesson = new mongoose.Schema({
     name: {type: String, required: true},
     slug: {type: String, slug: 'name', unique: true, require: true},
-    teachers: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+    teacher: {type: mongoose.Schema.Types.ObjectId, ref: 'User'},
     class: {type: mongoose.Schema.Types.ObjectId, ref: 'Class'}
 })
 
